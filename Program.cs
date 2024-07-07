@@ -16,11 +16,14 @@ app.UseSwaggerUI();
 
 app.Use(async (context, next) =>
 {
-    const double failOdds = 0.5; // 50%
+    // 0.3 -> 30%
+    const double failOdds = 0.3;
     
-    var random = new Random();
-    if (random.NextDouble() < failOdds)
+    if (Random.Shared.NextDouble() < failOdds)
     {
+        var logger = context.RequestServices.GetService<ILogger<Program>>();
+        logger?.LogError("* Simulating Issue for route: {route}", context.Request.Path.Value);
+        
         context.Response.StatusCode = 500;
         await context.Response.WriteAsync(JsonSerializer.Serialize(new{ Message = "Simulated fail" }));
         return;
