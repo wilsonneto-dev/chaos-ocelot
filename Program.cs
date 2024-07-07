@@ -16,7 +16,8 @@ app.UseSwaggerUI();
 
 app.Use(async (context, next) =>
 {
-    const double failOdds = 0.5;
+    const double failOdds = 0.5; // 50%
+    
     var random = new Random();
     if (random.NextDouble() < failOdds)
     {
